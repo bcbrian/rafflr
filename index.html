@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script> 
+
+      //function that gets called when submit is clicked
+      var validateMatchFunction = function(){
+        var names = ["John", "Jeff", "Jack"];
+        //get the users input
+        var userName = document.getElementById("name").value;
+        var randomName = getRandomIndexValue(names);
+
+        //notify user of chosen name
+        alert("Random Name Choosen was "+randomName);
+
+        //nested if statement to check if input was valid and then checking if it was a match
+        if(containsValueIncaseSenitive(names, userName)){
+          if (userName.toLowerCase()===randomName.toLowerCase()){
+            alert("It's a match!");
+          } 
+          else {
+            alert("It's not a match.");
+          }
+        }else{
+          alert("You cannot submit "+ userName);
+        }
+      }
+
+      // This function returns a random value from an array writing it this way
+      // allows it to be more of a utility function.
+      var getRandomIndexValue = function(array){
+        return array[Math.floor((Math.random() * array.length) )];
+      }
+
+      //This function returns true if the value exits in the array whether ot not 
+      //case matches. If it does not match it returns false.
+      var containsValueIncaseSenitive = function(array, value){
+        var testArray = [];
+        // This next part runs a function on each index of an array
+        // a for loop or while loop here is also acceptable
+        // 
+        // for (var i = array.length - 1; i >= 0; i--) {
+        //   testArray.push(array[i].toLowerCase());
+        // };
+        // 
+        array.forEach(function(oldValue){
+          testArray.push(oldValue.toLowerCase());
+        });
+        //return the boolean result of this computation
+        return testArray.indexOf(value.toLowerCase()) > -1;
+      }
+
+    </script>
+
+  </head>
+  
+  <body>
+      <label for="name">Type in one of the following: John, Jeff, or Jack.</label><br/><br/>
+      <input type="text" id="name" class="form-control">
+      <br/>
+      <input type="submit" value="Submit" onclick="validateMatchFunction()">
+    </div>
+  </body>
+
+</html>
