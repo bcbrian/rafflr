@@ -69,7 +69,30 @@
   
   <body ng-app="rafflr" ng-controller="rafflrController">
     <div class="container"> 
-      <label for="name">Type in one of the following: John, Jeff, or Jack.</label><br/><br/>
+      <label for="name">Type in one of the following:
+        <!-- This method will introduce an error to be resolved in next story -->
+        <!-- Here are several was to handle the scenerio and error followinf --> 
+
+        <!-- <sapn ng-repeat="name in names">
+          <span ng-if="$index < $parent.names.length - 1"> {{name}}, </span>
+          <span ng-if="$index >= $parent.names.length - 1">or {{name}}.</span>
+        </sapn> -->
+
+        <!-- ngRepeat has a track feature, defualt is to track by values in arrays. -->
+        <!-- Here we tracked by $index. This is the index value on the array. -->
+
+        <!-- <sapn ng-repeat="name in names track by $index">
+          <span ng-if="$index < $parent.names.length - 1"> {{name}}, </span>
+          <span ng-if="$index >= $parent.names.length - 1">or {{name}}.</span>
+        </sapn> -->
+
+        <!-- Another way to handle detecting if it is the last element in the array. -->
+        <sapn ng-repeat="name in names track by $index">
+          <span ng-if="!$last"> {{name}}, </span>
+          <span ng-if="$last">or {{name}}.</span>
+        </sapn>
+        <!-- Thats it for now -->
+      </label><br/><br/>
       <input type="text" id="name" class="form-control" ng-model="userName">
       <br/>
       <input type="button" class="btn btn-primary" value="Submit" ng-click="validateMatchFunction()">
