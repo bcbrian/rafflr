@@ -39,6 +39,13 @@
           }
 
           $scope.addNewName = function(name){
+            // Added if statement to remove ngRepeat Dup error
+            // This is dependant on desired functionality and
+            // will have a todo
+            // TODO: allow this functionality to be controlled by the raffle admin
+            if(containsValueIncaseSenitive($scope.names, name)){
+              return alert('This name is already entered.');
+            }
             $scope.names.push(name);
           }
 
@@ -87,7 +94,14 @@
         </sapn> -->
 
         <!-- Another way to handle detecting if it is the last element in the array. -->
-        <sapn ng-repeat="name in names track by $index">
+
+        <!-- <sapn ng-repeat="name in names track by $index">
+          <span ng-if="!$last"> {{name}}, </span>
+          <span ng-if="$last">or {{name}}.</span>
+        </sapn> -->
+        
+        <!-- Final way to do this examples will be cleared out for story 3. -->
+        <sapn ng-repeat="name in names">
           <span ng-if="!$last"> {{name}}, </span>
           <span ng-if="$last">or {{name}}.</span>
         </sapn>
