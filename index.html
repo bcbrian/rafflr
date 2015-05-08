@@ -31,34 +31,7 @@
           $scope.userName = "";
           $scope.newName = "";
 
-          //function that gets called when submit is clicked
-          $scope.validateMatchFunction = function(){
-            var randomName = rUtils.getRandomIndexValue($scope.names);
-
-            //notify user of chosen name
-            alert("Random Name Choosen was "+randomName);
-
-            //nested if statement to check if input was valid and then checking if it was a match
-            if(rUtils.containsValueIncaseSenitive($scope.names, $scope.userName)){
-              if ($scope.userName.toLowerCase()===randomName.toLowerCase()){
-                alert("It's a match!");
-              } 
-              else {
-                alert("It's not a match.");
-              }
-            }else{
-              alert("You cannot submit "+ $scope.userName);
-            }
-          }
-
-          $scope.addNewName = function(name){
-            // TODO: allow this functionality to be controlled by the raffle admin
-            if(rUtils.containsValueIncaseSenitive($scope.names, name)){
-              return alert('This name is already entered.');
-            }
-            $scope.names.push(name);
-          }
-        }]).directive('chooseWinner', function(){
+        }]).directive('chooseWinner',['rUtils', function(rUtils){
           // Runs during compile
           return {
             // name: '',
@@ -84,10 +57,28 @@
             // transclude: true,
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
-              
+              //function that gets called when submit is clicked
+              $scope.validateMatchFunction = function(){
+                var randomName = rUtils.getRandomIndexValue($scope.names);
+
+                //notify user of chosen name
+                alert("Random Name Choosen was "+randomName);
+
+                //nested if statement to check if input was valid and then checking if it was a match
+                if(rUtils.containsValueIncaseSenitive($scope.names, $scope.userName)){
+                  if ($scope.userName.toLowerCase()===randomName.toLowerCase()){
+                    alert("It's a match!");
+                  } 
+                  else {
+                    alert("It's not a match.");
+                  }
+                }else{
+                  alert("You cannot submit "+ $scope.userName);
+                }
+              } 
             }
           };
-        }).directive('addContestant', function(){
+        }]).directive('addContestant',['rUtils', function(rUtils){
           // Runs during compile
           return {
             // name: '',
@@ -108,10 +99,16 @@
             // transclude: true,
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
-              
+              $scope.addNewName = function(name){
+                // TODO: allow this functionality to be controlled by the raffle admin
+                if(rUtils.containsValueIncaseSenitive($scope.names, name)){
+                  return alert('This name is already entered.');
+                }
+                $scope.names.push(name);
+              }
             }
           };
-        });
+        }]);
 
     </script>
 
