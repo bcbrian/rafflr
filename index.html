@@ -23,6 +23,7 @@
           return testArray.indexOf(value.toLowerCase()) > -1;
         }
       });
+
       angular.module('rafflr', ['rafflrUtils'])
         .controller('rafflrController', ['$scope','rUtils', function($scope,rUtils){
           //attach names to scope
@@ -57,32 +58,68 @@
             }
             $scope.names.push(name);
           }
-        }]);
-
-      
+        }]).directive('chooseWinner', function(){
+          // Runs during compile
+          return {
+            // name: '',
+            // priority: 1,
+            // terminal: true,
+            // scope: {}, // {} = isolate, true = child, false/undefined = no change
+            // controller: function($scope, $element, $attrs, $transclude) {},
+            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+            restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
+            template: '<div class="container"> '+
+                      '  <label for="name">Type in one of the following:'+
+                      '    <sapn ng-repeat="name in names">'+
+                      '      <span ng-if="!$last"> {{name}}, </span>'+
+                      '      <span ng-if="$last">or {{name}}.</span>'+
+                      '    </sapn>'+
+                      '  </label><br/><br/>'+
+                      '  <input type="text" id="name" class="form-control" ng-model="userName">'+
+                      '  <br/>'+
+                      '  <input type="button" class="btn btn-primary" value="Submit" ng-click="validateMatchFunction()">'+
+                      '</div>',
+            // templateUrl: '',
+            // replace: true,
+            // transclude: true,
+            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
+            link: function($scope, iElm, iAttrs, controller) {
+              
+            }
+          };
+        }).directive('addContestant', function(){
+          // Runs during compile
+          return {
+            // name: '',
+            // priority: 1,
+            // terminal: true,
+            // scope: {}, // {} = isolate, true = child, false/undefined = no change
+            // controller: function($scope, $element, $attrs, $transclude) {},
+            // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
+            restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
+            template: '<div class="container"> '+
+                      '  <label for="name">Add new Name</label><br/><br/>'+
+                      '  <input type="text" id="name" class="form-control" ng-model="newName">'+
+                      '  <br/>'+
+                      '  <input type="button" class="btn btn-primary" value="Add Name" ng-click="addNewName(newName)">'+
+                      '</div>',
+            // templateUrl: '',
+            // replace: true,
+            // transclude: true,
+            // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
+            link: function($scope, iElm, iAttrs, controller) {
+              
+            }
+          };
+        });
 
     </script>
 
   </head>
   
   <body ng-app="rafflr" ng-controller="rafflrController">
-    <div class="container"> 
-      <label for="name">Type in one of the following:
-        <sapn ng-repeat="name in names">
-          <span ng-if="!$last"> {{name}}, </span>
-          <span ng-if="$last">or {{name}}.</span>
-        </sapn>
-      </label><br/><br/>
-      <input type="text" id="name" class="form-control" ng-model="userName">
-      <br/>
-      <input type="button" class="btn btn-primary" value="Submit" ng-click="validateMatchFunction()">
-    </div>
-    <div class="container"> 
-      <label for="name">Add new Name</label><br/><br/>
-      <input type="text" id="name" class="form-control" ng-model="newName">
-      <br/>
-      <input type="button" class="btn btn-primary" value="Add Name" ng-click="addNewName(newName)">
-    </div>
+    <choose-winner></choose-winner>
+    <add-contestant></add-contestant>
   </body>
 
 </html>
