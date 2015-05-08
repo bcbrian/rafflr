@@ -16,6 +16,7 @@
           //attach names to scope
           $scope.names = ["John", "Jeff", "Jack"];
           $scope.userName = "";
+          $scope.newName = "";
 
           //function that gets called when submit is clicked
           $scope.validateMatchFunction = function(){
@@ -35,6 +36,10 @@
             }else{
               alert("You cannot submit "+ $scope.userName);
             }
+          }
+
+          $scope.addNewName = function(name){
+            $scope.names.push(name);
           }
 
           // This function returns a random value from an array writing it this way
@@ -68,6 +73,12 @@
       <input type="text" id="name" class="form-control" ng-model="userName">
       <br/>
       <input type="button" class="btn btn-primary" value="Submit" ng-click="validateMatchFunction()">
+    </div>
+    <div class="container"> 
+      <label for="name">Add new Name</label><br/><br/>
+      <input type="text" id="name" class="form-control" ng-model="newName">
+      <br/>
+      <input type="button" class="btn btn-primary" value="Add Name" ng-click="addNewName(newName)">
     </div>
   </body>
 
