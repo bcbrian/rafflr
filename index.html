@@ -21,17 +21,53 @@
           });
           //return the boolean result of this computation
           return testArray.indexOf(value.toLowerCase()) > -1;
-        }
+        };
+
+        //This function tests a string to see if it looks like an email.
+        this.validateEmail = function (email) {
+          var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+          return re.test(email);
+        };
       });
 
       angular.module('rafflr', ['rafflrUtils'])
         .controller('rafflrController', ['$scope','rUtils', function($scope,rUtils){
-          //attach names to scope
-          $scope.names = ["John", "Jeff", "Jack"];
-          $scope.userName = "";
-          $scope.newName = "";
+          //attach emails to scope
+          $scope.emails = [];
+          $scope.userEmail = "";
+          $scope.newEmail = "";
 
-        }]).directive('chooseWinner',['rUtils', function(rUtils){
+          //function that gets called when submit is clicked
+          $scope.validateMatchFunction = function(){
+            var randomEmail = rUtils.getRandomIndexValue($scope.emails);
+
+            //notify user of chosen name
+            alert("Random Name Choosen was "+randomEmail);
+
+            //nested if statement to check if input was valid and then checking if it was a match
+            if(rUtils.containsValueIncaseSenitive($scope.emails, $scope.userEmail)){
+              if ($scope.userEmail.toLowerCase()===randomEmail.toLowerCase()){
+                alert("It's a match!");
+              } 
+              else {
+                alert("It's not a match.");
+              }
+            }else{
+              alert("You cannot submit "+ $scope.userEmail);
+            }
+          };
+
+          $scope.addNewEmail = function(email){
+            // TODO: allow this functionality to be controlled by the raffle admin
+            if(!rUtils.validateEmail(email)){
+              return alert('This "'+email+'" is not a valid email.');
+            }
+            if(rUtils.containsValueIncaseSenitive($scope.emails, email)){
+              return alert('This email is already entered.');
+            }
+            $scope.emails.push(email);
+          };
+        }]).directive('chooseWinner', function(){
           // Runs during compile
           return {
             // name: '',
@@ -42,13 +78,13 @@
             // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
             restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
             template: '<div class="container"> '+
-                      '  <label for="name">Type in one of the following:'+
-                      '    <sapn ng-repeat="name in names">'+
-                      '      <span ng-if="!$last"> {{name}}, </span>'+
-                      '      <span ng-if="$last">or {{name}}.</span>'+
+                      '  <label for="email">Type in one of the following:'+
+                      '    <sapn ng-repeat="email in emails">'+
+                      '      <span ng-if="!$last"> {{email}}, </span>'+
+                      '      <span ng-if="$last">or {{email}}.</span>'+
                       '    </sapn>'+
                       '  </label><br/><br/>'+
-                      '  <input type="text" id="name" class="form-control" ng-model="userName">'+
+                      '  <input type="text" id="email" class="form-control" ng-model="userEmail">'+
                       '  <br/>'+
                       '  <input type="button" class="btn btn-primary" value="Submit" ng-click="validateMatchFunction()">'+
                       '</div>',
@@ -57,28 +93,10 @@
             // transclude: true,
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
-              //function that gets called when submit is clicked
-              $scope.validateMatchFunction = function(){
-                var randomName = rUtils.getRandomIndexValue($scope.names);
-
-                //notify user of chosen name
-                alert("Random Name Choosen was "+randomName);
-
-                //nested if statement to check if input was valid and then checking if it was a match
-                if(rUtils.containsValueIncaseSenitive($scope.names, $scope.userName)){
-                  if ($scope.userName.toLowerCase()===randomName.toLowerCase()){
-                    alert("It's a match!");
-                  } 
-                  else {
-                    alert("It's not a match.");
-                  }
-                }else{
-                  alert("You cannot submit "+ $scope.userName);
-                }
-              } 
+              
             }
           };
-        }]).directive('addContestant',['rUtils', function(rUtils){
+        }).directive('addContestant', function(){
           // Runs during compile
           return {
             // name: '',
@@ -89,26 +107,20 @@
             // require: 'ngModel', // Array = multiple requires, ? = optional, ^ = check parent elements
             restrict: 'E', // E = Element, A = Attribute, C = Class, M = Comment
             template: '<div class="container"> '+
-                      '  <label for="name">Add new Name</label><br/><br/>'+
-                      '  <input type="text" id="name" class="form-control" ng-model="newName">'+
+                      '  <label for="name">Add new Email</label><br/><br/>'+
+                      '  <input type="type" id="name" class="form-control" ng-model="newEmail">'+
                       '  <br/>'+
-                      '  <input type="button" class="btn btn-primary" value="Add Name" ng-click="addNewName(newName)">'+
+                      '  <input type="button" class="btn btn-primary" value="Add Email" ng-click="addNewEmail(newEmail)">'+
                       '</div>',
             // templateUrl: '',
             // replace: true,
             // transclude: true,
             // compile: function(tElement, tAttrs, function transclude(function(scope, cloneLinkingFn){ return function linking(scope, elm, attrs){}})),
             link: function($scope, iElm, iAttrs, controller) {
-              $scope.addNewName = function(name){
-                // TODO: allow this functionality to be controlled by the raffle admin
-                if(rUtils.containsValueIncaseSenitive($scope.names, name)){
-                  return alert('This name is already entered.');
-                }
-                $scope.names.push(name);
-              }
+              
             }
           };
-        }]);
+        });
 
     </script>
 
